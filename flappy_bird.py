@@ -153,6 +153,7 @@ def draw_window(win, bird,base,lamps) :
 
     for lamp in lamps:
          lamp.draw(win)
+
     base.draw(win)
     bird.draw(win)
     pygame.display.update()
@@ -163,6 +164,7 @@ def main():
     lamps = [Lamp(700)]
     win = pygame.display.set_mode((win_width, win_heingt))
     clock = pygame.time.Clock()
+    score =0
     run =True
     while run:
         clock.tick(30)
@@ -170,11 +172,27 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             #bird.move()
-            for lamp in lamps:
-                lamp.move()
+        rem=[]
+        add_lamp = False
+        for lamp in lamps:
+            if lamp.collide(bird):
+                pass
+            if lamp.x + lamp.lamp_top.get_width() < 0:
+                    rem.append(lamp)
+            if not lamp.passed and lamp.x < bird.x:
+                    lamp.passed = True
+                    add_lamp = True
+            lamp.move()
+        if add_lamp:
+            score += 1
+            lamps.append(Lamp(700))
+            lamp.move()
 
-            base.move()
-            draw_window(win, bird,base,lamps)
+        for r in rem:
+            lamps.remove(r)
+
+        base.move()
+        draw_window(win, bird,base,lamps)
           
     pygame.quit()
     quit()

@@ -73,8 +73,55 @@ class Bird:
         rotate_image = pygame.transform.rotate(self.img, self.tilt)
         new_rect = rotate_image.get_rect(center =self.img.get_rect(topleft = (self.x,self.y)).center)
         win.blit(rotate_image, new_rect.topleft)
+
     def get_mask(self) :
         return pygame.mask.from_surface(self.img)
+
+class lamp:
+    gap = 200
+    vel = 5
+    
+
+    def __init__(self,x):
+        self.x =x
+        self.height =0
+        self.gay = 100
+
+        self.top =0
+        self.bottom = 0
+        self.lamp_top =  pygame.transform.flip(lamp_img, False,True)
+        self.lamp_bottom = lamp_img
+
+        self.passed = False
+        self.set_height()
+
+    def set_height(self):
+        self.height =random.randrange(50,450)
+        self.top = self.height - self.lamp_top.get_height
+        self.bottom = self.height + self.gap
+
+    def draw(self,win):
+        win.blit(self.lamp_top,(self.x, self.top))
+        win.blit(self.lamp_bottom,(self.x, self.bottom))
+
+    def move(self):
+        self.x -= self.vel
+    
+    def collide(self,bird):
+        bird_mask = bird.get_mask()
+        top_mask = pygame.mask.from_surface(self.lamp_top)
+        bottom_mask = pygame.mask.from_surface(self.lamp_bottom)
+
+        top_offset = (self.x - bird.x, self.top - round(bird.y))
+        bottom_offset =(self.x - bird.x, self.bottom - round(bird.y))
+
+        b_point = bird_mask.overlap(bottom_mask,bottom_offset)
+        t_point = bird_mask.overlap(top_mask,top_offset)
+
+        if t_point or b_point:
+            return True
+        return False
+
 
 
 

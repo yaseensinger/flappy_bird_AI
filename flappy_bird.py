@@ -77,7 +77,7 @@ class Bird:
     def get_mask(self) :
         return pygame.mask.from_surface(self.img)
 
-class lamp:
+class Lamp:
     gap = 200
     vel = 5
     
@@ -97,7 +97,7 @@ class lamp:
 
     def set_height(self):
         self.height =random.randrange(50,450)
-        self.top = self.height - self.lamp_top.get_height
+        self.top = self.height - self.lamp_top.get_height()
         self.bottom = self.height + self.gap
 
     def draw(self,win):
@@ -123,26 +123,58 @@ class lamp:
         return False
 
 
+class Base:
+    vel = 5
+    width = base_img.get_width()
+    img = base_img
+
+    def __init__(self,y):
+        self.y = y 
+        self.x1 = 0
+        self.x2= self.width
+
+    def move (self):
+        self.x1 -= self.vel
+        self.x2 -= self.vel
+
+        if self.x1 + self.width < 0:
+            self.x1 = self.x2 + self.width
+        
+        if self.x2 + self.width < 0:
+            self.x2 = self.x1 + self.width
+
+    def draw(self,win):
+        win.blit(self.img,(self.x1, self.y))
+        win.blit(self.img,(self.x2, self.y))
 
 
-def draw_window(win, bird) :
-     win.blit(bg_img,(0,0))
-     bird.draw(win)
-     pygame.display.update()
+def draw_window(win, bird,base,lamps) :
+    win.blit(bg_img,(0,0))
+
+    for lamp in lamps:
+         lamp.draw(win)
+    base.draw(win)
+    bird.draw(win)
+    pygame.display.update()
 
 def main():
-    bird = Bird(200,200)
-    win = pygame.display.set_mode((win_width,win_heingt))
+    bird = Bird(230,350)
+    base = Base(730)
+    lamps = [Lamp(700)]
+    win = pygame.display.set_mode((win_width, win_heingt))
     clock = pygame.time.Clock()
     run =True
     while run:
-        
-        clock =30
+        clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            bird.move()
-            draw_window(win, bird)
+            #bird.move()
+            for lamp in lamps:
+                lamp.move()
+
+            base.move()
+            draw_window(win, bird,base,lamps)
           
     pygame.quit()
     quit()

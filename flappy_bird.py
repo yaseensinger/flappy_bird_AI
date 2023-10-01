@@ -87,7 +87,7 @@ class Lamp:
     def __init__(self,x):
         self.x = x
         self.height =0
-        self.gay = 100
+        self.gap = 100
 
         self.top = 0
         self.bottom = 0

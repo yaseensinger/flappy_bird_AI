@@ -15,7 +15,7 @@ This project is an implementation of the classic game Flappy Bird, with the adde
 
 1. Clone the repository to your local machine:
 ```
-git clone https://github.com/your-username/flappy-bird-ai.git
+https://github.com/yaseensinger/flappy_bird_AI.git
 ```
 Install the required dependencies:
 ```
